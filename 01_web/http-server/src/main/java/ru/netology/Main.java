@@ -1,15 +1,18 @@
 package ru.netology;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
-    final var validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html", "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js");
+    final var validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html", "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js", "/favicon.ico");
 
     try (final var serverSocket = new ServerSocket(9999)) {
       while (true) {
@@ -18,6 +21,7 @@ public class Main {
             final var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             final var out = new BufferedOutputStream(socket.getOutputStream());
         ) {
+          System.out.println(new Date() + "Здесь точка останова дебаггера");
           // read only request line for simplicity
           // must be in form GET /path HTTP/1.1
           final var requestLine = in.readLine();
@@ -40,7 +44,7 @@ public class Main {
             continue;
           }
 
-          final var filePath = Path.of(".", "public", path);
+          final var filePath = Path.of("./01_web/http-server", "public", path);
           final var mimeType = Files.probeContentType(filePath);
 
           // special case for classic
